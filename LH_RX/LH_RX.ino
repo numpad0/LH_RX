@@ -22,46 +22,26 @@ void loop() {
   // trigger on fall edge - LH_1             mark + 65-135us
   // calculate and set LH_1_OOTX[skip, data, axis]
 
-  // ///////// LH RX SLOT 2                                       -  400 -  800us window
+  // ///////// LH RX SLOT 2                                       -  400 -  535us window (+ margins)
   // trigger on rise edge - LH_2    -  400us mark
   // set LH_2_RISE
 
   // trigger on fall edge - LH_2             mark + 65-135us
   // calculate and set LH_2_OOTX[skip, data, axis]
 
-  // ///////// LH RX SLOT 3                                       -  800 - 1200us window
-  // trigger on rise edge - LH_3  -  800us mark
-  // set LH_3_RISE
-
-  // trigger on fall edge - LH_3           mark + 65-135us  
-  // calculate and set LH_3_OOTX[skip, data, axis]
-
-  // Following may occur:
-  //     LH 1 LH 2 LH 3
-  // A|   0    0    0
-  // B|   0    0    1
-  // C|   0    1    1 
-  // D|   0    1    0
-  // E|   1    1    0
-  // F|   1    1    1
-  // G|   1    0    1
-  // H|   1    0    0
-
-  // Following is valid: E, H
-  // E: 
+  // IF LH_2_RISE is valid:
   //   Assume LH 1 = LH_B
   //   Assume LH 2 = LH_C
   //   System should enter LASER SWEEP at T+1222us
   //   set BIH_EXT = true(norm)
 
-  // H: 
+  // IF LH_2_RISE is invalid:
   //   Assume LH 1 = LH_C
   //   Assume LH 2 = LH_NONE
   //   System should enter LASER SWEEP at T+ 822us
   //   set BIH_EXT = false(recovery)
 
-  // Following is invalid: A, B, C, D, F, G
-  // System should return to WATCH state
+  // at this point there should be 287us time without margins until LASER SWEEP
 
   // wait for BUILT IN HOLD EXPIRE  -  822us mark
   // if BIH_LEN = false:                     mark +   0us
